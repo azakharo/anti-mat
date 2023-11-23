@@ -89,7 +89,8 @@ const Main = () => {
                 value={input}
                 onChange={handleInputChange}
                 size="small"
-                placeholder="Введите текст"
+                placeholder="Введите текст, нажмите Enter"
+                sx={{minWidth: '80ch'}}
               />
               <Button type="submit" variant="contained">
                 OK
