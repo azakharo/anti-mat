@@ -21,6 +21,7 @@ import {containsMat} from 'src/services/antimat';
 interface TextExample {
   text: string;
   hasMat: boolean;
+  suspiciousWords: string[];
 }
 
 const Main = () => {
@@ -35,21 +36,24 @@ const Main = () => {
   const handleSubmit: FormEventHandler = evt => {
     evt.preventDefault();
 
-    const status = containsMat(input);
+    const [status, suspiciousWords] = containsMat(input);
 
-    setTexts(prevTexts => [...prevTexts, {text: input, hasMat: status}]);
+    setTexts(prevTexts => [
+      ...prevTexts,
+      {text: input, hasMat: status, suspiciousWords},
+    ]);
     setInput('');
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="lg">
       <Box my={2}>
         <Typography variant="h5">
           Проверка текста на нецензурную лексику
         </Typography>
 
         <Stack spacing={1} mt={2}>
-          {texts.map(({text, hasMat}, index) => (
+          {texts.map(({text, hasMat, suspiciousWords}, index) => (
             <Box
               py={1}
               borderRadius={2}
@@ -63,7 +67,17 @@ const Main = () => {
               ) : (
                 <CheckCircleOutlineOutlinedIcon sx={{fill: 'lightgreen'}} />
               )}
-              {text}
+
+              <Typography variant="body1">{text}</Typography>
+
+              {hasMat && (
+                <>
+                  <Typography variant="body2" color="lightcoral">
+                    Подозрительные слова:{' '}
+                    {suspiciousWords.map(w => `"${w}"`).join(', ')}
+                  </Typography>
+                </>
+              )}
             </Box>
           ))}
         </Stack>

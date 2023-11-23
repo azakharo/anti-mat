@@ -5,7 +5,7 @@ const badPatterns = [
   '^сволоч(ь|ъ|и|уга|ам|ами).*',
   '.*урод(ы|у|ам|ина|ины).*',
   '.*бля(т|д).*',
-  '.*гандо.*',
+  '.*г(а|о)ндо.*',
   '^м(а|о)нд(а|о).*',
   '^сучк(а|у|и|е|ой|ай).*',
   '^придур(ок|ки).*',
@@ -21,10 +21,10 @@ const badPatterns = [
   '.*п(и|е|ы)зд.*',
   '^бл(я|т|д).*',
   '(с|сц)ук(а|о|и|у).*',
-  '^еб.*',
+  '^(е|ё)б.*',
   '.*(д(о|а)лб(о|а)|разъ|разь|за|вы|по)ебы*.*',
   '.*пид(а|о|е)р.*',
-  '.*хер.*',
+  '^хер.*',
 ];
 
 const goodPatterns = [
@@ -101,9 +101,14 @@ const isInBadPatterns = (word: string) =>
     return re.test(word);
   });
 
-export const containsMat = (originalText: string): boolean => {
+export const containsMat = (originalText: string): [boolean, string[]] => {
   const text = removeBadSymbols(originalText.toLowerCase());
-  const words = text.split(' ').map(w => convertLatinLettersToRu(w));
+  const words = text
+    .split(' ')
+    .filter(w => !!w)
+    .map(w => convertLatinLettersToRu(w));
+  let hasMat = false;
+  const suspiciousWords = [];
 
   for (const word of words) {
     if (isInGoodPatterns(word)) {
@@ -111,9 +116,10 @@ export const containsMat = (originalText: string): boolean => {
     }
 
     if (isInBadPatterns(word)) {
-      return true;
+      suspiciousWords.push(word);
+      hasMat = true;
     }
   }
 
-  return false;
+  return [hasMat, suspiciousWords];
 };
