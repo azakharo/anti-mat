@@ -49,13 +49,14 @@ const Main = () => {
         </Typography>
 
         <Stack spacing={1} mt={2}>
-          {texts.map(({text, hasMat}) => (
+          {texts.map(({text, hasMat}, index) => (
             <Box
               py={1}
               borderRadius={2}
               display="flex"
               alignItems="center"
               gap={1}
+              key={`${index}_${text}`}
             >
               {hasMat ? (
                 <ErrorOutlineOutlinedIcon sx={{fill: 'lightcoral'}} />
