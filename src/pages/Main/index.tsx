@@ -91,6 +91,7 @@ const Main = () => {
                 size="small"
                 placeholder="Введите текст, нажмите Enter"
                 sx={{minWidth: '80ch'}}
+                autoFocus
               />
               <Button type="submit" variant="contained">
                 OK
